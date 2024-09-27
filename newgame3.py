@@ -12,9 +12,6 @@ def main():
     st.title("旅行プランナー")
     st.text("・このサイトは、皆さんのバカンスを最高なものにするために開発されました。")
     st.text("・まずは目的地.グルメ.観光地などの気になる条件から入力してみましょう！")
-    
-    font = "Zen_Maru_Gothic"
-
     # Sidebarの選択肢を定義する
     options = ["MEMO", "MAP", "EXIT"]
     choice = st.sidebar.selectbox("Select an option", options)
