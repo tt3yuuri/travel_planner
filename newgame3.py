@@ -5,6 +5,8 @@ import pandas as pd
 def main():
     llm = ChatOpenAI(temperature=0)
 
+    backgroundcolor="00FF--"
+
     st.set_page_config(
         page_title="Trip Planner",
         page_icon="🧳"
