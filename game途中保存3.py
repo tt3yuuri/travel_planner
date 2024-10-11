@@ -6,22 +6,22 @@ def main():
     llm = ChatOpenAI(temperature=0)
 
     st.set_page_config(
-        page_title="Trip Planner",
+        page_title="Travel Planner",
         page_icon="🧳"
     )
-    st.title("旅行プランナー")
+    st.title("Travel Planner")
     st.text("・このサイトは、皆さんのバカンスを最高なものにするために開発されました。")
     st.text("・まずは目的地.グルメ.観光地などの気になる条件から入力してみましょう！")
     
     # Sidebarの選択肢を定義する
-    options = ["MEMO", "MAP", "EXIT"]
+    options = ["AI", "MAP", "EXIT"]
     choice = st.sidebar.selectbox("Select an option", options)
     # Mainコンテンツの表示を変える
     if choice == "MAP":
         st.write("You selected MAP")
         MAP()
-    elif choice == "MEMO":
-        st.write("You selected MEMO")
+    elif choice == "AI":
+        st.write("You selected AI")
         condition()
         AI()
     else:
