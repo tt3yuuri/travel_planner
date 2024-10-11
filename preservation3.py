@@ -77,18 +77,18 @@ def AI():
 
 
 def condition():
-    st.header("滞在条件の設定")
+    st.header("Setting Conditions of Stay")
     global value
-    value = st.slider('滞在日数', 1, 14, 1) # min, max, default
+    value = st.slider('Travel Period', 1, 14, 1) # min, max, default
     global people
     people = st.radio(
-        '人数', 
-        ['1人', '2人', '3人',"4人","それ以上"]
+        'number of people', 
+        ['1', '2', '3',"4","5 or more"]
     )
     global traffic
     traffic = st.radio(
-        "交通",
-        ["飛行機","船","新幹線","タクシー","レンタカー","自家用車"]
+        "traffic",
+        ["airplane","ship","新幹線","taxi","rental car","my car"]
     )
     global cost
     cost = st.radio(
