@@ -88,7 +88,7 @@ def condition():
     global traffic
     traffic = st.radio(
         "traffic",
-        ["airplane","ship","新幹線","taxi","rental car","my car"]
+        ["airplane","ship","shinkansen","taxi","rental car","my car"]
     )
     global cost
     cost = st.radio(
