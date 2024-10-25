@@ -4,6 +4,8 @@ from langchain.chat_models import ChatOpenAI
 from langchain.schema import (SystemMessage, HumanMessage, AIMessage)
 import pandas as pd
 from langchain.callbacks import get_openai_callback
+from  streamlit_folium import st_folium
+import folium
 
 def main():
     llm = ChatOpenAI(temperature=0)
@@ -43,17 +45,47 @@ def redirect():
     """, unsafe_allow_html=True)
 
 def MAP():
-    # 緯度と経度を設定
-    latitude = 55 # 例として東京駅の緯度
-    longitude = -3 # 例として東京駅の経度
+    def accurate_map():
 
-    # 緯度と経度から地図用のデータフレームを作成
-    data = pd.DataFrame({
-        'lat': [latitude],
-        'lon': [longitude]
-    })
-    st.map(data)
-# 地図を表示
+        m = folium.Map(
+            location=[35.17081269026154, 137.0339428258054],
+            zoom_start=16,
+            attr='Folium map'
+        )
+
+        # 地図上のクリックした場所にポップアップを表示する
+        m.add_child(folium.LatLngPopup())
+
+        # ユーザーのクリック情報を取得
+        st_data = st_folium(m, width=725, height=500)
+
+        # ユーザーが地図上をクリックした場合の処理
+        if st_data["last_clicked"] is not None:
+            clicked_lat = st_data["last_clicked"]["lat"]
+            clicked_lng = st_data["last_clicked"]["lng"]
+
+            st.write(f"クリックした場所の座標: 緯度 {clicked_lat}, 経度 {clicked_lng}")
+
+            # 新しい地図を作成してクリックした場所にマーカーを追加
+            m = folium.Map(
+                location=[clicked_lat, clicked_lng],
+                zoom_start=16,
+                attr='Folium map'
+            )
+            # マーカーをクリックした場所に追加
+            folium.Marker(
+                location=[clicked_lat, clicked_lng],
+                popup=f"Latitude: {clicked_lat}, Longitude: {clicked_lng}",
+                tooltip="Click me!"
+            ).add_to(m)
+
+            # マップを再表示
+            st_folium(m, width=725, height=500)
+
+        
+    accurate_map()
+
+    
 
 def AI():
     # ユーザーの入力を監視
