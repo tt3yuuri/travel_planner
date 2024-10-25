@@ -31,7 +31,7 @@ def main():
     else:
         st.write("You selected EXIT")
         redirect()
-    # チャット履歴の初期化
+    # チャット履歴の初期化をする
     if "messages" not in st.session_state:
         st.session_state.messages = [
             SystemMessage(content="You are a trip plannner.You should provide great trip plan.")
