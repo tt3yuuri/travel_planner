@@ -1,14 +1,17 @@
 import streamlit as st
 
-from langchain.chat_models import ChatOpenAI
+from langchain_community.chat_models import ChatOpenAI
 from langchain.schema import (SystemMessage, HumanMessage, AIMessage)
 import pandas as pd
-from langchain.callbacks import get_openai_callback
+from langchain_community.callbacks.manager import get_openai_callback
 from  streamlit_folium import st_folium
 import folium
+from duckduckgo_search import DDGS
+from pydantic import BaseModel
+from langchain_openai import ChatOpenAI
 
 def main():
-    llm = ChatOpenAI(temperature=0)
+    llm = ChatOpenAI(temperature=0, model_name='gpt-3.5-turbo')
 
     st.set_page_config(
         page_title="Trip Planner",
@@ -90,10 +93,11 @@ def MAP():
 def AI():
     # ユーザーの入力を監視
     llm = ChatOpenAI(temperature=0)
+    model_name = 'gpt-3.5-turbo'
     if user_input := st.chat_input("聞きたいことを入力して下さい"):
         st.session_state.messages.append(HumanMessage(content=user_input))
         with st.spinner("ChatGPT is typing ..."):
-            response = llm(st.session_state.messages)
+            response = llm.invoke(st.session_state.messages)
         st.session_state.messages.append(AIMessage(content=response.content))
 
     # チャット履歴の表示
@@ -175,6 +179,11 @@ def question_response():
                 st.markdown(message.content)
         else:  # isinstance(message, SystemMessage):
             st.write(f"System message: {message.content}")
+
+def duckduckgo():
+    global sentence
+    results = DDGS().text(sentence,region="jp-jp",max_results=3)
+    print (results)
 
 if __name__ == '__main__':
     main()
