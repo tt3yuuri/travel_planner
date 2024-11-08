@@ -8,6 +8,7 @@ import pandas as pd
 #from langchain.callbacks import get_openai_callback
 from  streamlit_folium import st_folium
 import folium
+from duckduckgo_search import DDGS
 
 def main():
     llm = ChatOpenAI(temperature=0)
