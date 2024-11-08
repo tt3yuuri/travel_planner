@@ -237,7 +237,7 @@ def duckduckgo():
 
     # 検索を実行する関数
     def search_duckduckgo(query):
-        results = DDGS().text(query, region="jp-jp", max_results=3)
+        results = DDGS().text(query, region="jp-jp", max_results=5)
         # 検索結果があるかどうかチェックする
         if results:
             # 検索結果の最初の項目のタイトルとURLを取得する
