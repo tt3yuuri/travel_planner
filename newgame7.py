@@ -225,6 +225,7 @@ def condition_DUCK():
     st.write("目的地：",place)
     st.write("リクエスト：",other0)
 
+    global sentence_DUCK
     sentence_DUCK = "滞在日数は"+str(value)+"日、人数は"+str(people)+"、交通手段は"+str(traffic)+"、予算は"+str(cost)+"で"+str(region)+"から出発して"+str(place)+"旅行に行きたいです。他のリクエストは「"+other0+"」です。最適な旅行プランを考えて下さい。応答は必ず日本語でお願いします。"
 
     if st.button("検索する"):
