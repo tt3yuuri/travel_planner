@@ -209,6 +209,13 @@ def condition_DUCK():
         "目的地",
         ["海外","国内"]
         )
+    other1 = st.text_area("他にもリクエストがある場合はここに記入してください。特になければ、[なし]にチェックを入れてください。",placeholder="羽田空港発で、出来れば早朝の便は避けたいです。")
+    other2 = st.checkbox("なし")
+
+    if other1:
+        other0 = other1
+    else:
+        other0 = "なし"
 
     st.write("滞在日数：",value)
     st.write("人数：",people)
@@ -216,6 +223,9 @@ def condition_DUCK():
     st.write("予算：",cost)
     st.write("出発地：",region)
     st.write("目的地：",place)
+    st.write("リクエスト：",other0)
+
+    sentence_DUCK = "滞在日数は"+str(value)+"日、人数は"+str(people)+"、交通手段は"+str(traffic)+"、予算は"+str(cost)+"で"+str(region)+"から出発して"+str(place)+"旅行に行きたいです。他のリクエストは「"+other0+"」です。最適な旅行プランを考えて下さい。応答は必ず日本語でお願いします。"
 
     if st.button("検索する"):
         duckduckgo()
@@ -226,7 +236,7 @@ def duckduckgo():
 
     # 検索を実行する関数
     def search_duckduckgo(query):
-        results = DDGS().text(query, region="jp-jp", max_results=33)
+        results = DDGS().text(query, region="jp-jp", max_results=3)
         # 検索結果があるかどうかチェックする
         if results:
             # 検索結果の最初の項目のタイトルとURLを取得する
@@ -255,8 +265,8 @@ def duckduckgo():
             st.write("検索結果が見つかりませんでした。")
 
     # 検索を実行する
-    Question = "リンゴ"
-    search_duckduckgo(Question)
+    global sentence_DUCK
+    search_duckduckgo(sentence_DUCK)
 
 
 if __name__ == '__main__':
