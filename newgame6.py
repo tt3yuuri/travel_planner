@@ -218,5 +218,6 @@ def duckduckgo():
     # 検索を実行する
     Question = "リンゴ"
     search_duckduckgo(Question)
+
 if __name__ == '__main__':
     main()
