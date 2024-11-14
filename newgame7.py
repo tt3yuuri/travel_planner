@@ -189,7 +189,7 @@ def condition_DUCK():
     global people
     people = st.radio(
         '人数', 
-        ['1人', '2人', '3人',"4人","それ以上"]
+        ['1人', '2人', '3人',"4人","5人以上"]
     )
     global traffic
     traffic = st.radio(
@@ -226,7 +226,7 @@ def condition_DUCK():
     st.write("リクエスト：",other0)
 
     global sentence_DUCK
-    sentence_DUCK = "滞在日数は"+str(value)+"日、人数は"+str(people)+"、交通手段は"+str(traffic)+"、予算は"+str(cost)+"で"+str(region)+"から出発して"+str(place)+"旅行に行きたいです。他のリクエストは「"+other0+"」です。最適な旅行プランを考えて下さい。応答は必ず日本語でお願いします。"
+    sentence_DUCK = "滞在日数は"+str(value)+"日、人数は"+str(people)+"、交通手段は"+str(traffic)+"、予算は"+str(cost)+"で"+str(region)+"から出発して"+str(place)+"旅行に行きたいです。顧客からのリクエストは「"+other0+"」です。旅行計画に最適なサイトを教えてください。応答は必ず日本語でお願いします。"
 
     if st.button("検索する"):
         duckduckgo()
