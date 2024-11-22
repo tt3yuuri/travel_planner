@@ -217,16 +217,16 @@ def condition_DUCK():
     else:
         other0 = "なし"
 
-    st.write("滞在日数：",value)
-    st.write("人数：",people)
-    st.write("交通手段：",traffic)
-    st.write("予算：",cost)
-    st.write("出発地：",region)
-    st.write("目的地：",place)
+    st.write("滞在日数：",value) #一週間
+    st.write("人数：",people) #二人
+    st.write("交通手段：",traffic) #飛行機
+    st.write("予算：",cost) #100万円以内
+    st.write("出発地：",region) #羽田空港
+    st.write("目的地：",place) #パリ
     st.write("リクエスト：",other0)
 
     global sentence_DUCK
-    sentence_DUCK = "滞在日数は"+str(value)+"日、人数は"+str(people)+"、交通手段は"+str(traffic)+"、予算は"+str(cost)+"で"+str(region)+"から出発して"+str(place)+"旅行に行きたいです。顧客からのリクエストは「"+other0+"」です。旅行計画に最適なサイトを教えてください。応答は必ず日本語でお願いします。"
+    sentence_DUCK = "旅行 "+region+"→"+place+" "+traffic+" "+value+" "+cost
 
     if st.button("検索する"):
         duckduckgo()
