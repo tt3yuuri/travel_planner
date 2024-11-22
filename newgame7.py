@@ -226,7 +226,7 @@ def condition_DUCK():
     st.write("リクエスト：",other0)
 
     global sentence_DUCK
-    sentence_DUCK = "旅行 "+region+"→"+place+" "+traffic+" "+value+" "+cost
+    sentence_DUCK = "旅行 "+str(region)+"→"+str(place)+" "+str(traffic)+" "+str(people)+" "+str(value)+" "+str(cost)
 
     if st.button("検索する"):
         duckduckgo()
