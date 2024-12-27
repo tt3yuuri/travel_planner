@@ -195,15 +195,11 @@ def condition_DUCK():
         ["飛行機","船","新幹線","タクシー","レンタカー","自家用車"]
     )
     global cost
-    cost = st.text_input("予算","(単位も表記してください。)")
+    cost = st.text_input("予算",placeholder="(単位も表記してください。)")
     global region
-    todofuken = ["北海道地方","東北地方","関東地方","中部地方","近畿地方","中国地方","四国地方","九州地方","沖縄県"]
-    region = st.selectbox("出発地",todofuken)
+    region = st.text_input("出発地",placeholder="成田空港")
     global place
-    place = st.radio(
-        "目的地",
-        ["海外","国内"]
-        )
+    place = st.text_input("目的地",placeholder="沖縄県,フランス")
     other1 = st.text_area("他にもリクエストがある場合はここに記入してください。特になければ、[なし]にチェックを入れてください。",placeholder="羽田空港発で、出来れば早朝の便は避けたいです。")
     other2 = st.checkbox("なし")
 
@@ -232,7 +228,7 @@ def duckduckgo():
 
     # 検索を実行する関数
     def search_duckduckgo(query):
-        results = DDGS().text(query, region="jp-jp", max_results=5)
+        results = DDGS().text(query, region="jp-jp", max_results=3)
         # 検索結果があるかどうかチェックする
         if results:
             # 検索結果の最初の項目のタイトルとURLを取得する

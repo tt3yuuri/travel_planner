@@ -31,9 +31,7 @@ def duckduckgo():
             # タイトルとURLを表示する
             st.write(f"3: {title3}")
             st.write(f"URL: {href3}")
-        else:
-            # 検索結果がなかった場合のメッセージを表示する
-            st.write("検索結果が見つかりませんでした。")
+            button = st.button("もっと見る")
 
     # 検索を実行する
     Question = "リンゴ"
