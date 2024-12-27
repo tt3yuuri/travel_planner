@@ -176,8 +176,14 @@ def question_response():
 
 def condition_DUCK():
     st.header("滞在条件の設定")
-    global value
-    value = st.slider('滞在日数', 1, 14, 1) # min, max, default
+    global date
+    min_date = datetime.date(2025, 1, 1)
+    max_date = datetime.date(2030, 12, 31)
+    date = st.date_input('出発日', datetime.date(2025, 1, 1), min_value=min_date, max_value=max_date)
+    global date2
+    min_date = datetime.date(2025, 1, 1)
+    max_date = datetime.date(2030, 12, 31)
+    date2 = st.date_input('到着日', datetime.date(2025, 1, 1), min_value=min_date, max_value=max_date)
     global people
     people = st.radio(
         '人数', 
@@ -206,7 +212,7 @@ def condition_DUCK():
     else:
         other0 = "なし"
 
-    st.write("滞在日数：",value)
+    st.write("日程：",date,"~",date2)
     st.write("人数：",people)
     st.write("交通手段：",traffic)
     st.write("予算：",cost)
@@ -215,7 +221,7 @@ def condition_DUCK():
     st.write("リクエスト：",other0)
 
     global sentence_DUCK
-    sentence_DUCK = str(value)+"日間 "+str(people)+"、交通手段は"+str(traffic)+"、予算は"+str(cost)+"で"+str(region)+"から出発して"+str(place)+"旅行に行きたいです。他のリクエストは「"+other0+"」"
+    sentence_DUCK = str(date)+"~"+str(date2)+"の間 "+str(people)+"、交通手段は"+str(traffic)+"、予算は"+str(cost)+"で"+str(region)+"から出発して"+str(place)+"旅行に行きたいです。他のリクエストは「"+other0+"」"
 
     if st.button("検索する"):
         duckduckgo()
