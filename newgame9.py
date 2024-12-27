@@ -22,18 +22,18 @@ def main():
     st.text("・このサイトは、皆さんのバカンスを最高なものにするために開発されました。")
     st.text("・まずは目的地.グルメ.観光地などの気になる条件から入力してみましょう！")
     # Sidebarの選択肢を定義する
-    options = ["MEMO","DUCK", "MAP", "EXIT"]
+    options = ["AI","WEB", "MAP", "EXIT"]
     choice = st.sidebar.selectbox("Select an option", options)
     # Mainコンテンツの表示を変える
     if choice == "MAP":
         st.write("You selected MAP")
         MAP()
-    elif choice == "MEMO":
-        st.write("You selected MEMO")
+    elif choice == "AI":
+        st.write("You selected AI")
         condition()
         AI()
-    elif choice == "DUCK":
-        st.write("You selected DUCK")
+    elif choice == "WEB":
+        st.write("You selected WEB")
         condition_DUCK()
     else:
         st.write("You selected EXIT")
