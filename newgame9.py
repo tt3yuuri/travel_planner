@@ -9,6 +9,7 @@ import pandas as pd
 from  streamlit_folium import st_folium
 import folium
 from duckduckgo_search import DDGS
+import datetime
 
 def main():
     #llm = ChatOpenAI(temperature=0)
@@ -118,8 +119,14 @@ def AI():
 
 def condition():
     st.header("滞在条件の設定")
-    global value
-    value = st.slider('滞在日数', 1, 14, 1) # min, max, default
+    global date
+    min_date = datetime.date(2025, 1, 1)
+    max_date = datetime.date(2030, 12, 31)
+    date = st.date_input('出発日', datetime.date(2025, 1, 1), min_value=min_date, max_value=max_date)
+    global date2
+    min_date = datetime.date(2025, 1, 1)
+    max_date = datetime.date(2030, 12, 31)
+    date2 = st.date_input('到着日', datetime.date(2025, 1, 1), min_value=min_date, max_value=max_date)
     global people
     people = st.radio(
         '人数', 
@@ -131,17 +138,13 @@ def condition():
         ["飛行機","船","新幹線","タクシー","レンタカー","自家用車"]
     )
     global cost
-    cost = st.text_input("予算","(単位も表記してください。)")
+    cost = st.text_input("予算",placeholder="(単位も表記してください。)")
     global region
-    todofuken = ["北海道地方","東北地方","関東地方","中部地方","近畿地方","中国地方","四国地方","九州地方","沖縄県"]
-    region = st.selectbox("出発地",todofuken)
+    region = st.text_input("出発地",placeholder="成田空港")
     global place
-    place = st.radio(
-        "目的地",
-        ["海外","国内"]
-        )
+    place = st.text_input("目的地",placeholder="沖縄県,フランス")
 
-    st.write("滞在日数：",value)
+    st.write("日程：",date,"~",date2)
     st.write("人数：",people)
     st.write("交通手段：",traffic)
     st.write("予算：",cost)
@@ -152,8 +155,8 @@ def condition():
         question()
 
 def question():
-    global value,people,traffic,cost,region,place,sentence
-    sentence = "滞在日数は"+str(value)+"日、人数は"+str(people)+"、交通手段は"+str(traffic)+"、予算は"+str(cost)+"で"+str(region)+"から出発して"+str(place)+"旅行に行きたいです。最適な旅行プランを考えて下さい。" 
+    global date,date2,people,traffic,cost,region,place,sentence
+    sentence = "滞在するのは"+str(date)+"~"+str(date2)+"日、人数は"+str(people)+"、交通手段は"+str(traffic)+"、予算は"+str(cost)+"で"+str(region)+"から出発して"+str(place)+"旅行に行きたいです。最適な旅行プランを考えて下さい。" 
     question_response()
 
 def question_response():
@@ -169,15 +172,7 @@ def question_response():
         st.session_state.messages.append(AIMessage(content=response.content))
 
     messages = st.session_state.get('messages', [])
-    for message in messages:
-        if isinstance(message, AIMessage):
-            with st.chat_message('assistant'):
-                st.markdown(message.content)
-        elif isinstance(message, HumanMessage):
-            with st.chat_message('user'):
-                st.markdown(message.content)
-        else:  # isinstance(message, SystemMessage):
-            st.write(f"System message: {message.content}")
+    
 
 def condition_DUCK():
     st.header("滞在条件の設定")
