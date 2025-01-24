@@ -10,6 +10,7 @@ from  streamlit_folium import st_folium
 import folium
 from duckduckgo_search import DDGS
 import datetime
+import pyautogui as pg
 
 def main():
     #llm = ChatOpenAI(temperature=0)
@@ -22,7 +23,7 @@ def main():
     st.text("・このサイトは、皆さんのバカンスを最高なものにするために開発されました。")
     st.text("・まずは目的地.グルメ.観光地などの気になる条件から入力してみましょう！")
     # Sidebarの選択肢を定義する
-    options = ["AI","WEB", "MAP", "EXIT"]
+    options = ["AI","WEB", "MAP", "MY NOTE","EXIT"]
     choice = st.sidebar.selectbox("Select an option", options)
     # Mainコンテンツの表示を変える
     if choice == "MAP":
@@ -35,6 +36,9 @@ def main():
     elif choice == "WEB":
         st.write("You selected WEB")
         condition_DUCK()
+    elif  choice == "MY NOTE":
+        st.write("You selected MY MEMO")
+        MEMO()
     else:
         st.write("You selected EXIT")
         redirect()
@@ -217,8 +221,9 @@ def condition_DUCK():
     st.write("リクエスト：",other0)
 
     global sentence_DUCK
-    sentence_DUCK = str(date)+"~"+str(date2)+"の間 "+str(people)+"、交通手段は"+str(traffic)+"、予算は"+str(cost)+"で"+str(region)+"から出発して"+str(place)+"旅行に行きたいです。他のリクエストは「"+other0+"」"
-
+    date_str = str(date)+" 何の日"
+    date2_str = str(date2)
+    sentence_DUCK = date_str
     if st.button("検索する"):
         duckduckgo()
 
@@ -228,7 +233,7 @@ def duckduckgo():
 
     # 検索を実行する関数
     def search_duckduckgo(query):
-        results = DDGS().text(query, region="jp-jp", max_results=3)
+        results = DDGS().text(query, region="jp-jp", max_results=5)
         # 検索結果があるかどうかチェックする
         if results:
             # 検索結果の最初の項目のタイトルとURLを取得する
@@ -274,7 +279,23 @@ def duckduckgo():
 
     # 検索を実行する
     global sentence_DUCK
-    search_duckduckgo(sentence_DUCK)
+    search_duckduckgo(query=sentence_DUCK)
+
+def MEMO():
+
+    # セッションステートにリストを初期化する
+    if 'my_list' not in st.session_state:
+        st.session_state.my_list = []
+
+    # ユーザーが入力した値を追加する
+    new_value = st.text_area('メモを入力してください。')
+
+    if st.button("追加"):
+        if new_value:
+            st.session_state.my_list.append(new_value)
+
+    # 現在のリストを表示
+    st.write('保存したメモ:', st.session_state.my_list)
 
 
 if __name__ == '__main__':
