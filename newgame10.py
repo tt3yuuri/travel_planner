@@ -23,29 +23,35 @@ def main():
     st.text("・このサイトは、皆さんのバカンスを最高なものにするために開発されました。")
     st.text("・まずは目的地.グルメ.観光地などの気になる条件から入力してみましょう！")
     # Sidebarの選択肢を定義する
-    options = ["AI","WEB", "MAP", "MY NOTE","EXIT"]
+    options = ["⌂ HOME","AI", "AI_plus","TRAFFIC", "DESTINATION","MAP","EXIT"]
     choice = st.sidebar.selectbox("Select an option", options)
     # Mainコンテンツの表示を変える
     if choice == "MAP":
         st.write("You selected MAP")
         MAP()
+    elif choice == "⌂ HOME":
+        st.write("myhomegood")
+        HOME()
     elif choice == "AI":
         st.write("You selected AI")
         condition()
         AI()
-    elif choice == "WEB":
+    elif choice == "AI_plus":
+        st.write("You selected AI_plus")
+        AI_plus()
+    elif choice == "TRAFFIC":
         st.write("You selected WEB")
-        condition_DUCK()
-    elif  choice == "MY NOTE":
-        st.write("You selected MY MEMO")
-        MEMO()
+        DUCK_airplane()
+    elif choice == "DESTINATION":
+        st.write("You selected DESTINATION")
+        DUCK_DESTINATION()
     else:
         st.write("You selected EXIT")
         redirect()
     # チャット履歴の初期化をする
     if "messages" not in st.session_state:
         st.session_state.messages = [
-            SystemMessage(content="You are a trip plannner.You should provide great trip plan.")
+            SystemMessage(content="You are a trip plannner.")
       ]
 
 
@@ -97,6 +103,15 @@ def MAP():
     accurate_map()
 
     
+def HOME():
+    st.image("mukakinojisan.jpg", use_column_width=True)
+    st.button("AI")
+    st.button("AI_plus")
+    st.button("TRAFFIC")
+    st.button("DESTINATION")
+    st.button("MAP")
+    st.button("EXIT")
+
 
 def AI():
     # ユーザーの入力を監視
@@ -119,6 +134,29 @@ def AI():
         else:  # isinstance(message, SystemMessage):
             st.write(f"System message: {message.content}")
     #st.image("c:/Users/junakimichi/Pictures/Saved Picture/IMG_0356.JPG", use_column_width=True)
+
+def AI_plus():
+    # ユーザーの入力を監視
+    llm = ChatOpenAI(temperature=0)
+    if user_input := st.chat_input("聞きたいことを入力して下さい"):
+        st.session_state.messages.append(HumanMessage(content=user_input))
+        with st.spinner("ChatGPT is typing ..."):
+            response = llm(st.session_state.messages)
+        st.session_state.messages.append(AIMessage(content=response.content))
+
+    # チャット履歴の表示
+    messages = st.session_state.get('messages', [])
+    for message in messages:
+        if isinstance(message, AIMessage):
+            with st.chat_message('assistant'):
+                st.markdown(message.content)
+        elif isinstance(message, HumanMessage):
+            with st.chat_message('user'):
+                st.markdown(message.content)
+        else:  # isinstance(message, SystemMessage):
+            st.write(f"System message: {message.content}")
+    #st.image("c:/Users/junakimichi/Pictures/Saved Picture/IMG_0356.JPG", use_column_width=True)
+
 
 def condition():
     st.header("滞在条件の設定")
@@ -175,33 +213,47 @@ def question_response():
         st.session_state.messages.append(AIMessage(content=response.content))
 
     messages = st.session_state.get('messages', [])
-    
 
-def condition_DUCK():
-    st.header("滞在条件の設定")
+
+def DUCK_airplane():
+    st.header("交通手段の検索")
     global date
-    min_date = datetime.date(2025, 1, 1)
+    min_date = datetime.date(2025, 2, 1)
     max_date = datetime.date(2030, 12, 31)
-    date = st.date_input('出発日', datetime.date(2025, 1, 1), min_value=min_date, max_value=max_date)
+    date = st.date_input('出発日', datetime.date(2025, 2, 1), min_value=min_date, max_value=max_date)
     global date2
-    min_date = datetime.date(2025, 1, 1)
+    min_date = datetime.date(2025, 2, 1)
     max_date = datetime.date(2030, 12, 31)
-    date2 = st.date_input('到着日', datetime.date(2025, 1, 1), min_value=min_date, max_value=max_date)
-    global people
-    people = st.radio(
-        '人数', 
-        ['1人', '2人', '3人',"4人","それ以上"]
-    )
+    date2 = st.date_input('到着日', datetime.date(2025, 2, 1), min_value=min_date, max_value=max_date)
     global traffic
     traffic = st.radio(
         "交通",
         ["飛行機","船","新幹線","タクシー","レンタカー","自家用車"]
     )
-    global cost
-    cost = st.text_input("予算",placeholder="(単位も表記してください。)")
     global region
     region = st.text_input("出発地",placeholder="成田空港")
     global place
+    place = st.text_input("目的地",placeholder="沖縄県,フランス")
+
+    st.write("日程：",date,"~",date2)
+    st.write("交通手段：",traffic)
+    st.write("出発地：",region)
+    st.write("目的地：",place)
+
+    global sentence_DUCK
+    sentence0 = traffic+" "+region+"-"+place+"間"
+    sentence_DUCK = sentence0+" "+str(date)+"~"+str(date2)
+    if st.button("検索する"):
+        duckduckgo()
+
+def DUCK_DESTINATION():
+    st.header("目的地の検索")
+    global people
+    people = st.radio(
+        '人数', 
+        ['1人', '2人', '3人',"4人","それ以上"]
+    )
+    cost = st.text_input("予算",placeholder="(単位も表記してください。)")
     place = st.text_input("目的地",placeholder="沖縄県,フランス")
     other1 = st.text_area("他にもリクエストがある場合はここに記入してください。特になければ、[なし]にチェックを入れてください。",placeholder="羽田空港発で、出来れば早朝の便は避けたいです。")
     other2 = st.checkbox("なし")
@@ -211,21 +263,16 @@ def condition_DUCK():
     else:
         other0 = "なし"
 
-    st.write("日程：",date,"~",date2)
     st.write("人数：",people)
-    st.write("交通手段：",traffic)
     st.write("予算：",cost)
-    st.write("出発地：",region)
     st.write("目的地：",place)
     st.write("リクエスト：",other0)
 
     global sentence_DUCK
-    date_str = str(date)+" 何の日"
-    date2_str = str(date2)
-    sentence_DUCK = date_str
+    sensence00 = place+" "+cost+" "+other0
+    sentence_DUCK = sensence00+" "+people+" おすすめ"
     if st.button("検索する"):
         duckduckgo()
-
 
 def duckduckgo():
     st.title("duckduckgo 検索結果")
@@ -256,22 +303,21 @@ def duckduckgo():
             # タイトルとURLを表示する
             st.write(f"3: {title3}")
             st.write(f"URL: {href3}")
-            anothersearch = st.button("もっと見る")
-            if anothersearch:
-                # 検索結果の四番目の項目のタイトルとURLを取得する
-                four_result = results[3]
-                title4 = four_result['title']
-                href4 = four_result['href']
-                # タイトルとURLを表示する
-                st.write(f"4: {title4}")
-                st.write(f"URL: {href4}")
-                # 検索結果の四番目の項目のタイトルとURLを取得する
-                five_result = results[4]
-                title5 = five_result['title']
-                href5 = five_result['href']
-                # タイトルとURLを表示する
-                st.write(f"5: {title5}")
-                st.write(f"URL: {href5}")
+            #anothersearch = st.button("もっと見る")
+            # 検索結果の四番目の項目のタイトルとURLを取得する
+            four_result = results[3]
+            title4 = four_result['title']
+            href4 = four_result['href']
+            # タイトルとURLを表示する
+            st.write(f"4: {title4}")
+            st.write(f"URL: {href4}")
+            # 検索結果の四番目の項目のタイトルとURLを取得する
+            five_result = results[4]
+            title5 = five_result['title']
+            href5 = five_result['href']
+            # タイトルとURLを表示する
+            st.write(f"5: {title5}")
+            st.write(f"URL: {href5}")
         else:
             # 検索結果がなかった場合のメッセージを表示する
             st.write("検索結果が見つかりませんでした。")
