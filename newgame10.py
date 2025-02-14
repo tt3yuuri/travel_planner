@@ -103,14 +103,36 @@ def MAP():
     accurate_map()
 
     
+# CSSファイルを読み込む関数
+def load_css():
+    with open("styles.css") as f:
+        st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+
 def HOME():
+    load_css()
     st.image("mukakinojisan.jpg", use_column_width=True)
-    st.button("AI")
-    st.button("AI_plus")
-    st.button("TRAFFIC")
-    st.button("DESTINATION")
-    st.button("MAP")
-    st.button("EXIT")
+    chooselist = [
+        st.button("AI"),
+        st.button("AI_plus"),
+        st.button("TRAFFIC"),
+        st.button("DESTINATION"),
+        st.button("MAP"),
+        st.button("EXIT")
+        ]
+    if chooselist[0]:
+        condition()
+        AI()
+    elif chooselist[1]:
+        AI_plus()
+    elif chooselist[2]:
+        DUCK_airplane()
+    elif chooselist[3]:
+        DUCK_DESTINATION()
+    elif chooselist[4]:
+        MAP()
+    elif chooselist[5]:
+        redirect()
+
 
 
 def AI():
