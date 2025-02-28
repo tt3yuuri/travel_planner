@@ -1,19 +1,19 @@
 .stButton>button{
     font-family: 'Noto Sans JP', serif;
-    font-size: 14px;
+    font-size: 10px;
     letter-spacing: 0.1em;
     color: #d34669;
-    font-weight: 700;
+    font-weight: 70;
     border: solid 3px #d34669;
-    border-radius: 999px;
+    border-radius: 99px;
     display: flex;
     box-sizing: border-box;
-    width: 220px;
-    height: 220px;
+    width: 100px;
+    height: 100px;
     text-align: center; 
     align-items: center; 
-    padding: 60px;
-    margin: 24px;
+    padding: 6px;
+    margin: 2px;
     margin-inline: auto;
     text-decoration: none;
     cursor: pointer;
