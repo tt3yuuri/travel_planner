@@ -10,7 +10,7 @@ from  streamlit_folium import st_folium
 import folium
 from duckduckgo_search import DDGS
 import datetime
-import pyautogui as pg
+#import pyautogui as pg
 
 def main():
     #llm = ChatOpenAI(temperature=0)
