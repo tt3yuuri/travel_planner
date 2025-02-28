@@ -111,6 +111,7 @@ def load_css():
 def HOME():
     load_css()
     st.image("mukakinojisan.jpg", use_column_width=True)
+    global choice
     chooselist = [
         st.button("AI"),
         st.button("AI_plus"),
