@@ -40,7 +40,7 @@ def main():
         st.write("You selected AI_plus")
         AI_plus()
     elif choice == "TRAFFIC":
-        st.write("You selected WEB")
+        st.write("You selected TRAFFIC")
         DUCK_airplane()
     elif choice == "DESTINATION":
         st.write("You selected DESTINATION")
@@ -110,7 +110,7 @@ def load_css():
 
 def HOME():
     load_css()
-    st.image("mukakinojisan.jpg", use_column_width=True)
+    #st.image("mukakinojisan.jpg", use_column_width=True)
 
     # ここでページ遷移のためにセッションステートに選択されたオプションを保存
     if 'selected_option' not in st.session_state:
