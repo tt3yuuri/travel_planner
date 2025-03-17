@@ -13,46 +13,42 @@ import datetime
 import pyautogui as pg
 
 def main():
-    #llm = ChatOpenAI(temperature=0)
-
+    # セッションステートに現在のページを保持
+    if 'current_page' not in st.session_state:
+        st.session_state.current_page = 'HOME'  # 初期ページはHOME
+    
     st.set_page_config(
         page_title="Trip Planner",
         page_icon="🧳"
     )
+    
     st.title("旅行プランナー")
     st.text("・このサイトは、皆さんのバカンスを最高なものにするために開発されました。")
     st.text("・まずは目的地.グルメ.観光地などの気になる条件から入力してみましょう！")
+    
     # Sidebarの選択肢を定義する
-    options = ["⌂ HOME","AI", "AI_plus","TRAFFIC", "DESTINATION","MAP","EXIT"]
+    options = ["⌂ HOME", "AI", "AI_plus", "TRAFFIC", "DESTINATION", "MAP", "EXIT"]
     choice = st.sidebar.selectbox("Select an option", options)
+    
+    # 現在のページをセッションステートで管理
+    st.session_state.current_page = choice
+    
     # Mainコンテンツの表示を変える
-    if choice == "MAP":
-        st.write("You selected MAP")
+    if st.session_state.current_page == "MAP":
         MAP()
-    elif choice == "⌂ HOME":
-        st.write("You selected HOME")
+    elif st.session_state.current_page == "⌂ HOME":
         HOME()
-    elif choice == "AI":
-        st.write("You selected AI")
+    elif st.session_state.current_page == "AI":
         condition()
         AI()
-    elif choice == "AI_plus":
-        st.write("You selected AI_plus")
+    elif st.session_state.current_page == "AI_plus":
         AI_plus()
-    elif choice == "TRAFFIC":
-        st.write("You selected WEB")
+    elif st.session_state.current_page == "TRAFFIC":
         DUCK_airplane()
-    elif choice == "DESTINATION":
-        st.write("You selected DESTINATION")
+    elif st.session_state.current_page == "DESTINATION":
         DUCK_DESTINATION()
     else:
-        st.write("You selected EXIT")
         redirect()
-    # チャット履歴の初期化をする
-    if "messages" not in st.session_state:
-        st.session_state.messages = [
-            SystemMessage(content="You are a trip plannner.")
-      ]
 
 
 def redirect():
@@ -111,11 +107,6 @@ def load_css():
 def HOME():
     load_css()
     st.image("mukakinojisan.jpg", use_column_width=True)
-
-    # ここでページ遷移のためにセッションステートに選択されたオプションを保存
-    if 'selected_option' not in st.session_state:
-        st.session_state.selected_option = None
-
     chooselist = [
         st.button("AI"),
         st.button("AI_plus"),
@@ -123,31 +114,21 @@ def HOME():
         st.button("DESTINATION"),
         st.button("MAP"),
         st.button("EXIT")
-        ]
+    ]
+    
+    # ボタンが押された場合、そのページに遷移
     if chooselist[0]:
-        st.session_state.selected_option = "AI"
-        condition()
-        AI()
+        st.session_state.current_page = "AI"
     elif chooselist[1]:
-        st.session_state.selected_option = "AI_plus"
-        AI_plus()
+        st.session_state.current_page = "AI_plus"
     elif chooselist[2]:
-        st.session_state.selected_option = "TRAFFIC"
-        DUCK_airplane()
+        st.session_state.current_page = "TRAFFIC"
     elif chooselist[3]:
-        st.session_state.selected_option = "DESTINATION"
-        DUCK_DESTINATION()
+        st.session_state.current_page = "DESTINATION"
     elif chooselist[4]:
-        st.session_state.selected_option = "MAP"
-        MAP()
+        st.session_state.current_page = "MAP"
     elif chooselist[5]:
-        st.session_state.selected_option = "EXIT"
         redirect()
-
-    # ボタン押下後に選択されたオプションを保持
-    if st.session_state.selected_option:
-        st.write(f"現在選択されているオプション: {st.session_state.selected_option}")
-
 
 
 def AI():
@@ -197,59 +178,94 @@ def AI_plus():
 
 def condition():
     st.header("滞在条件の設定")
-    global date
+    
+    # すでにセッションステートに情報が保存されていればその値を使う
+    if 'date' not in st.session_state:
+        st.session_state.date = datetime.date(2025, 1, 1)
+    if 'date2' not in st.session_state:
+        st.session_state.date2 = datetime.date(2025, 1, 1)
+    if 'people' not in st.session_state:
+        st.session_state.people = '1人'
+    if 'traffic' not in st.session_state:
+        st.session_state.traffic = '飛行機'
+    if 'cost' not in st.session_state:
+        st.session_state.cost = ''
+    if 'region' not in st.session_state:
+        st.session_state.region = ''
+    if 'place' not in st.session_state:
+        st.session_state.place = ''
+    
+    # ユーザー入力をセッションステートに保存
     min_date = datetime.date(2025, 1, 1)
     max_date = datetime.date(2030, 12, 31)
-    date = st.date_input('出発日', datetime.date(2025, 1, 1), min_value=min_date, max_value=max_date)
-    global date2
-    min_date = datetime.date(2025, 1, 1)
-    max_date = datetime.date(2030, 12, 31)
-    date2 = st.date_input('到着日', datetime.date(2025, 1, 1), min_value=min_date, max_value=max_date)
-    global people
-    people = st.radio(
-        '人数', 
-        ['1人', '2人', '3人',"4人","それ以上"]
-    )
-    global traffic
-    traffic = st.radio(
-        "交通",
-        ["飛行機","船","新幹線","タクシー","レンタカー","自家用車"]
-    )
-    global cost
-    cost = st.text_input("予算",placeholder="(単位も表記してください。)")
-    global region
-    region = st.text_input("出発地",placeholder="成田空港")
-    global place
-    place = st.text_input("目的地",placeholder="沖縄県,フランス")
+    
+    st.session_state.date = st.date_input('出発日', st.session_state.date, min_value=min_date, max_value=max_date)
+    st.session_state.date2 = st.date_input('到着日', st.session_state.date2, min_value=min_date, max_value=max_date)
 
-    st.write("日程：",date,"~",date2)
-    st.write("人数：",people)
-    st.write("交通手段：",traffic)
-    st.write("予算：",cost)
-    st.write("出発地：",region)
-    st.write("目的地：",place)
+    st.session_state.people = st.radio(
+        '人数', 
+        ['1人', '2人', '3人', "4人", "それ以上"],
+        index=['1人', '2人', '3人', "4人", "それ以上"].index(st.session_state.people)
+    )
+
+    st.session_state.traffic = st.radio(
+        "交通",
+        ["飛行機", "船", "新幹線", "タクシー", "レンタカー", "自家用車"],
+        index=["飛行機", "船", "新幹線", "タクシー", "レンタカー", "自家用車"].index(st.session_state.traffic)
+    )
+
+    st.session_state.cost = st.text_input("予算", value=st.session_state.cost, placeholder="(単位も表記してください。)")
+
+    st.session_state.region = st.text_input("出発地", value=st.session_state.region, placeholder="成田空港")
+    st.session_state.place = st.text_input("目的地", value=st.session_state.place, placeholder="沖縄県,フランス")
+
+    # 現在の状態を表示
+    st.write("日程：", st.session_state.date, "~", st.session_state.date2)
+    st.write("人数：", st.session_state.people)
+    st.write("交通手段：", st.session_state.traffic)
+    st.write("予算：", st.session_state.cost)
+    st.write("出発地：", st.session_state.region)
+    st.write("目的地：", st.session_state.place)
 
     if st.button("検索する"):
         question()
+
+
         
 def question():
-    global date,date2,people,traffic,cost,region,place,sentence
-    sentence = "滞在するのは"+str(date)+"~"+str(date2)+"日、人数は"+str(people)+"、交通手段は"+str(traffic)+"、予算は"+str(cost)+"で"+str(region)+"から出発して"+str(place)+"旅行に行きたいです。最適な旅行プランを考えて下さい。" 
-    question_response()
+    # セッションステートから条件を取得
+    date = st.session_state.date
+    date2 = st.session_state.date2
+    people = st.session_state.people
+    traffic = st.session_state.traffic
+    cost = st.session_state.cost
+    region = st.session_state.region
+    place = st.session_state.place
 
-def question_response():
-    global sentence
-    user_input = sentence+"please response in japanese. 応答は必ず日本語で生成してください"
-    print(user_input)
+    sentence = f"滞在するのは{date}~{date2}日、人数は{people}、交通手段は{traffic}、予算は{cost}で{region}から出発して{place}旅行に行きたいです。最適な旅行プランを考えて下さい。"
+    
+    question_response(sentence)
+
+
+def question_response(sentence):
     st.write("この条件で検索しています・・・")
     llm = ChatOpenAI(temperature=0)
-    if user_input := sentence:
-        st.session_state.messages.append(HumanMessage(content=user_input))
-        with st.spinner("ChatGPT is typing ..."):
-            response = llm(st.session_state.messages)
-        st.session_state.messages.append(AIMessage(content=response.content))
+    st.session_state.messages.append(HumanMessage(content=sentence))
+    with st.spinner("ChatGPT is typing ..."):
+        response = llm(st.session_state.messages)
+    st.session_state.messages.append(AIMessage(content=response.content))
 
     messages = st.session_state.get('messages', [])
+    for message in messages:
+        if isinstance(message, AIMessage):
+            with st.chat_message('assistant'):
+                st.markdown(message.content)
+        elif isinstance(message, HumanMessage):
+            with st.chat_message('user'):
+                st.markdown(message.content)
+        else:  # isinstance(message, SystemMessage):
+            st.write(f"System message: {message.content}")
+
 
 
 def DUCK_airplane():
@@ -257,11 +273,11 @@ def DUCK_airplane():
     global date
     min_date = datetime.date(2025, 2, 1)
     max_date = datetime.date(2030, 12, 31)
-    date = st.date_input('家を出発', datetime.date(2025, 2, 1), min_value=min_date, max_value=max_date)
+    date = st.date_input('出発日', datetime.date(2025, 2, 1), min_value=min_date, max_value=max_date)
     global date2
     min_date = datetime.date(2025, 2, 1)
     max_date = datetime.date(2030, 12, 31)
-    date2 = st.date_input('家に到着', datetime.date(2025, 2, 1), min_value=min_date, max_value=max_date)
+    date2 = st.date_input('到着日', datetime.date(2025, 2, 1), min_value=min_date, max_value=max_date)
     global traffic
     traffic = st.radio(
         "交通",
