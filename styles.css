@@ -1,3 +1,12 @@
+/*.stButton {
+  display:flex;
+  justify-content: space-evenly;
+  gap: 1px;
+  flex-direction: row;
+  width: 100%;
+}
+
+
 .stButton > button{
     font-family: 'Noto Sans JP', serif;
     font-size: 10px;
@@ -11,16 +20,45 @@
     height: 100px;
     text-align: center; 
     align-items: center; 
-    padding: 6px;
-    margin: 2px;
-    margin-inline: 10px;
     text-decoration: none;
     cursor: pointer;
     transition: all 0.3s;
-}
-
-.stButton > button:hover{
+  }
+.stButton>button:hover{
   color: #fff;
   background: #e16f94;
-  transition: all 0.3s;*/
+  transition: all 0.3s;
+}*/
+
+
+.stButton {
+  display: flex;
+  justify-content: space-evenly;
+  gap: 10px; 
+  flex-direction: row; 
+  width: 100%; 
+}
+
+.stButton > button {
+  font-family: 'Noto Sans JP', serif;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: #d34669;
+  font-weight: 70;
+  border: solid 3px #d34669;
+  border-radius: 99px;
+  box-sizing: border-box;
+  width: 100px;
+  height: 100px;
+  text-align: center;
+  align-items: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.stButton > button:hover {
+  color: #fff;
+  background: #e16f94;
+  transition: all 0.3s;
 }
