@@ -1,4 +1,4 @@
-.stButton>button{
+.stButton > button{
     font-family: 'Noto Sans JP', serif;
     font-size: 10px;
     letter-spacing: 0.1em;
@@ -6,8 +6,6 @@
     font-weight: 70;
     border: solid 3px #d34669;
     border-radius: 99px;
-    display: flex;
-    display: inline-block;
     box-sizing: border-box;
     width: 100px;
     height: 100px;
@@ -19,9 +17,10 @@
     text-decoration: none;
     cursor: pointer;
     transition: all 0.3s;
-  }
-.stButton>button:hover {
-    color: #fff;
-    background: #e16f94;
-    transition: all 0.3s;
-  }
+}
+
+.stButton > button:hover{
+  color: #fff;
+  background: #e16f94;
+  transition: all 0.3s;*/
+}

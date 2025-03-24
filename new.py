@@ -16,10 +16,10 @@ def main():
     #llm = ChatOpenAI(temperature=0)
 
     st.set_page_config(
-        page_title="Trip Planner",
+        page_title="Travel Planner",
         page_icon="🧳"
     )
-    st.title("旅行プランナー")
+    st.title("Travel Planner")
     st.text("・このサイトは、皆さんのバカンスを最高なものにするために開発されました。")
     st.text("・まずは目的地.グルメ.観光地などの気になる条件から入力してみましょう！")
     # Sidebarの選択肢を定義する
@@ -143,6 +143,8 @@ def HOME():
     elif chooselist[5]:
         st.session_state.selected_option = "EXIT"
         redirect()
+
+    st.write("※これらのボタンは制作上の都合でバグが起きる可能性があります。左のサイドバーから各機能をお試し下さい。")
 
     # ボタン押下後に選択されたオプションを保持
     if st.session_state.selected_option:
